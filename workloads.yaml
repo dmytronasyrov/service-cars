@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: service-cars
+spec:
+  selector:
+    app: service-cars
+  type: NodePort
+  ports:
+    - name: http
+      port: 8080
+      nodePort: 31000
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: service-cars
+spec:
+  selector:
+    matchLabels:
+      app: service-cars
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: service-cars
+    spec:
+      containers:
+        - name: server
+          image: dmytronasyrov/service-cars
+          ports:
+            - name: http
+              containerPort: 8080
+
+---
